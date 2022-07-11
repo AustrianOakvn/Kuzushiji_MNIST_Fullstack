@@ -68,3 +68,5 @@ class KMnistDataLoader(BaseDataLoader):
         data = np.load('data_dir')
         self.data = torch.from_numpy(data).long()
 
+        # Change sth to test
+
