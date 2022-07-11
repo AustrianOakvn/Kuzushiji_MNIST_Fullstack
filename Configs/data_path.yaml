@@ -1,0 +1,5 @@
+k_mnist:
+  train_imgs: Data/kmnist-train-imgs.npz
+  train_labels: Data/kmnist-train-labels.npz
+  test_imgs: Data/kmnist-test-imgs.npz
+  test_labels: Data/kmnist-test-labels.npz

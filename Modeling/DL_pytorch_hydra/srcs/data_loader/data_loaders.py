@@ -62,11 +62,26 @@ class MnistDataLoader(BaseDataLoader):
 
 
 class KMnistDataLoader(BaseDataLoader):
-    def __init__(self, data_dir, batch_size, shuffle=False, validation_split=0.0, num_workers=1, training=True) -> None:
+    def __init__(self, data_dir:str, label_dir:str, batch_size:int, transform=None, shuffle=False, validation_split=0.0, num_workers=1, training=True) -> None:
         super().__init__()
 
-        data = np.load('data_dir')
+        data = np.load(data_dir)
+        target = np.load(label_dir)
         self.data = torch.from_numpy(data).long()
 
-        # Change sth to test
+        self.data = self.data.unsqueeze(1)
+        self.target = torch.from_numpy(target).long()
+        self.transform = transform
+
+    def __getitem__(self, index):
+        x = self.data[index]
+        y = self.data[index]
+
+        if self.transform:
+            x = self.transform(x)
+
+        return x, y
+
+    def __len__(self):
+        return len(self.data)
 
