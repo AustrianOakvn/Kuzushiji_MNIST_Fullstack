@@ -1,3 +1,4 @@
+import torch
 import torch.distributed as dist
 from torch.utils.data import DataLoader, DistributedSampler, random_split
 from torchvision import datasets, transforms
@@ -65,3 +66,5 @@ class KMnistDataLoader(BaseDataLoader):
         super().__init__()
 
         data = np.load('data_dir')
+        self.data = torch.from_numpy(target).long()
+
