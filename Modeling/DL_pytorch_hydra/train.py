@@ -17,6 +17,9 @@ np.random.seed(SEED)
 
 
 def train_worker(config):
+    """
+    Train worker
+    """
     logger = get_logger('train')
     # setup data_loader instances
     data_loader, valid_data_loader = instantiate(config.data_loader)
@@ -43,10 +46,14 @@ def train_worker(config):
     trainer.train()
 
 def init_worker(rank, ngpus, working_dir, config):
+    """
+    Init worker
+    """
     # initialize training config
     config = OmegaConf.create(config)
     config.local_rank = rank
     config.cwd = working_dir
+    # print(config)
     # prevent access to non-existing keys
     OmegaConf.set_struct(config, True)
 
@@ -58,10 +65,14 @@ def init_worker(rank, ngpus, working_dir, config):
     torch.cuda.set_device(rank)
 
     # start training processes
+    print('Start train worker')
     train_worker(config)
 
 @hydra.main(config_path='conf/', config_name='train')
 def main(config):
+    """
+    Main function
+    """
     n_gpu = torch.cuda.device_count()
     # assert n_gpu, 'Can\'t find any GPU device on this machine.'
 
@@ -71,8 +82,11 @@ def main(config):
     if config.resume is not None:
         config.resume = hydra.utils.to_absolute_path(config.resume)
     config = OmegaConf.to_yaml(config, resolve=True)
-    print(config)
+    # print(config)
+    print(n_gpu)
     torch.multiprocessing.spawn(init_worker, nprocs=n_gpu, args=(n_gpu, working_dir, config))
+    init_worker(1, n_gpu, working_dir, config)
+    print("Hello")
 
 if __name__ == '__main__':
     # pylint: disable=no-value-for-parameter

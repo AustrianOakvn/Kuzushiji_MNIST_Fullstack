@@ -19,3 +19,4 @@ defaults:
   # Problem in the config of hydra/run/dir. 
   # TODO: Fix this error
   # - override hydra/run/dir: job_timestamp
+  # - override hydra/run: job_timestamp
