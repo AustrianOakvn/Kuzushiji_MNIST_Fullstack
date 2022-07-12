@@ -1,3 +1,5 @@
+
+# @package _global_
 resume:
 save_dir: models/
 log_dir: ${name}/
@@ -13,5 +15,7 @@ defaults:
 
   - status: train
 
-  # - hydra/job_logging : custom
-  # - hydra/run/dir: job_timestamp
+  - override hydra/job_logging : custom
+  # Problem in the config of hydra/run/dir. 
+  # TODO: Fix this error
+  # - override hydra/run/dir: job_timestamp

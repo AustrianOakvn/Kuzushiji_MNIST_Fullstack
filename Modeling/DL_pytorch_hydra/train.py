@@ -63,7 +63,7 @@ def init_worker(rank, ngpus, working_dir, config):
 @hydra.main(config_path='conf/', config_name='train')
 def main(config):
     n_gpu = torch.cuda.device_count()
-    assert n_gpu, 'Can\'t find any GPU device on this machine.'
+    # assert n_gpu, 'Can\'t find any GPU device on this machine.'
 
     working_dir = str(Path.cwd().relative_to(hydra.utils.get_original_cwd()))
     # print(working_dir)
