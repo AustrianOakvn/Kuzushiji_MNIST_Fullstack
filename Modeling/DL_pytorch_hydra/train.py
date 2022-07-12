@@ -66,10 +66,12 @@ def main(config):
     assert n_gpu, 'Can\'t find any GPU device on this machine.'
 
     working_dir = str(Path.cwd().relative_to(hydra.utils.get_original_cwd()))
+    # print(working_dir)
 
     if config.resume is not None:
         config.resume = hydra.utils.to_absolute_path(config.resume)
     config = OmegaConf.to_yaml(config, resolve=True)
+    print(config)
     torch.multiprocessing.spawn(init_worker, nprocs=n_gpu, args=(n_gpu, working_dir, config))
 
 if __name__ == '__main__':
