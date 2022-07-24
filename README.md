@@ -2,9 +2,9 @@
 
 ## Dataset
 
-Name: Kuzushiji-MNIST
-Task: Classify handwritten characters in ancient Japanese manuscripts
-Kaggle link: [Click here](https://www.kaggle.com/datasets/anokas/kuzushiji)
+- Name: Kuzushiji-MNIST
+- Task: Classify handwritten characters in ancient Japanese manuscripts
+- Kaggle link: [Click here](https://www.kaggle.com/datasets/anokas/kuzushiji)
 
 ## How to use
 
