@@ -2,7 +2,7 @@ import torch
 import torch.distributed as dist
 from torch.utils.data import DataLoader, DistributedSampler, random_split
 from torchvision import datasets, transforms
-from base import BaseDataLoader
+# from base import BaseDataLoader
 import numpy as np
 
 
@@ -45,43 +45,43 @@ def get_data_loaders(data_dir, batch_size, shuffle=True, validation_split=0.0, n
 
 
 
-class MnistDataLoader(BaseDataLoader):
-    """
-    MNIST data loading demo using BaseDataLoader
-    """
-    def __init__(self, data_dir, batch_size, shuffle=True, validation_split=0.0, num_workers=1, training=True):
-        trsfm = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.1307,), (0.3081,))
-        ])
-        self.data_dir = data_dir
-        self.dataset = datasets.MNIST(self.data_dir, train=training, download=True, transform=trsfm)
-        super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)
+# class MnistDataLoader(BaseDataLoader):
+#     """
+#     MNIST data loading demo using BaseDataLoader
+#     """
+#     def __init__(self, data_dir, batch_size, shuffle=True, validation_split=0.0, num_workers=1, training=True):
+#         trsfm = transforms.Compose([
+#             transforms.ToTensor(),
+#             transforms.Normalize((0.1307,), (0.3081,))
+#         ])
+#         self.data_dir = data_dir
+#         self.dataset = datasets.MNIST(self.data_dir, train=training, download=True, transform=trsfm)
+#         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)
 
 
 
 
-class KMnistDataLoader(BaseDataLoader):
-    def __init__(self, data_dir:str, label_dir:str, batch_size:int, transform=None, shuffle=False, validation_split=0.0, num_workers=1, training=True) -> None:
-        super().__init__()
+# class KMnistDataLoader(BaseDataLoader):
+#     def __init__(self, data_dir:str, label_dir:str, batch_size:int, transform=None, shuffle=False, validation_split=0.0, num_workers=1, training=True) -> None:
+#         super().__init__()
 
-        data = np.load(data_dir)
-        target = np.load(label_dir)
-        self.data = torch.from_numpy(data).long()
+#         data = np.load(data_dir)
+#         target = np.load(label_dir)
+#         self.data = torch.from_numpy(data).long()
 
-        self.data = self.data.unsqueeze(1)
-        self.target = torch.from_numpy(target).long()
-        self.transform = transform
+#         self.data = self.data.unsqueeze(1)
+#         self.target = torch.from_numpy(target).long()
+#         self.transform = transform
 
-    def __getitem__(self, index):
-        x = self.data[index]
-        y = self.data[index]
+#     def __getitem__(self, index):
+#         x = self.data[index]
+#         y = self.data[index]
 
-        if self.transform:
-            x = self.transform(x)
+#         if self.transform:
+#             x = self.transform(x)
 
-        return x, y
+#         return x, y
 
-    def __len__(self):
-        return len(self.data)
+#     def __len__(self):
+#         return len(self.data)
 

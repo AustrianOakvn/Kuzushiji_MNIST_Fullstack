@@ -22,10 +22,12 @@ def train_worker(config):
     """
     logger = get_logger('train')
     # setup data_loader instances
-    data_loader, valid_data_loader = instantiate(config.data_loader)
+    data_loader, valid_data_loader = instantiate(config.data_loader, is_func=False)
+    # data_loader, valid_data_loader = instantiate(config.data_loader, is_func=True)
 
     # build model. print it's structure and # trainable params.
-    model = instantiate(config.arch)
+    print(config.arch)
+    model = instantiate(config.arch, is_func=False)
     trainable_params = filter(lambda p: p.requires_grad, model.parameters())
     logger.info(model)
     logger.info(f'Trainable parameters: {sum([p.numel() for p in trainable_params])}')
@@ -57,12 +59,17 @@ def init_worker(rank, ngpus, working_dir, config):
     # prevent access to non-existing keys
     OmegaConf.set_struct(config, True)
 
-    dist.init_process_group(
-        backend='nccl',
-        init_method='tcp://127.0.0.1:34567',
-        world_size=ngpus,
-        rank=rank)
-    torch.cuda.set_device(rank)
+    # TODO: Timeout error: The client socket has timed out after 1800s while trying to connect to 127.0.0.1, 34567
+
+    # dist.init_process_group(
+    #     backend='nccl',
+    #     init_method='tcp://127.0.0.1:34567',
+    #     world_size=ngpus,
+    #     rank=rank)
+
+    # Comment out in case of using only cpu
+
+    # torch.cuda.set_device(rank)
 
     # start training processes
     print('Start train worker')
@@ -73,6 +80,7 @@ def main(config):
     """
     Main function
     """
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     n_gpu = torch.cuda.device_count()
     # assert n_gpu, 'Can\'t find any GPU device on this machine.'
 
@@ -84,7 +92,7 @@ def main(config):
     config = OmegaConf.to_yaml(config, resolve=True)
     # print(config)
     print(n_gpu)
-    torch.multiprocessing.spawn(init_worker, nprocs=n_gpu, args=(n_gpu, working_dir, config))
+    # torch.multiprocessing.spawn(init_worker, nprocs=n_gpu, args=(n_gpu, working_dir, config))
     init_worker(1, n_gpu, working_dir, config)
     print("Hello")
 
