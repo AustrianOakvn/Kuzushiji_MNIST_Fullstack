@@ -80,7 +80,9 @@ def main(config):
     """
     Main function
     """
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    print(device)
+    print(type(device))
     n_gpu = torch.cuda.device_count()
     # assert n_gpu, 'Can\'t find any GPU device on this machine.'
 
@@ -93,7 +95,9 @@ def main(config):
     # print(config)
     print(n_gpu)
     # torch.multiprocessing.spawn(init_worker, nprocs=n_gpu, args=(n_gpu, working_dir, config))
-    init_worker(1, n_gpu, working_dir, config)
+    # init_worker(1, n_gpu, working_dir, config)
+    init_worker(device, n_gpu, working_dir, config)
+    
     print("Hello")
 
 if __name__ == '__main__':

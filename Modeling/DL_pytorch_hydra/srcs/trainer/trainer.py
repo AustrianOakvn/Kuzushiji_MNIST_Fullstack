@@ -37,8 +37,8 @@ class Trainer(BaseTrainer):
         self.model.train()
         self.train_metrics.reset()
         for batch_idx, (data, target) in enumerate(self.data_loader):
-            data, target = data.to(self.device), target.to(self.device)
 
+            data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output = self.model(data)
             loss = self.criterion(output, target)
@@ -46,12 +46,20 @@ class Trainer(BaseTrainer):
             self.optimizer.step()
 
             self.writer.set_step((epoch - 1) * self.len_epoch + batch_idx)
-            self.train_metrics.update('loss', collect(loss))
+            if self.device == torch.device("cpu"):
+                self.train_metrics.update('loss', loss.detach().numpy())
+            else:
+                self.train_metrics.update('loss', collect(loss))
+
 
             if batch_idx % self.log_step == 0:
                 self.writer.add_image('train/input', make_grid(data.cpu(), nrow=8, normalize=True))
                 for met in self.metric_ftns:
-                    metric = collect(met(output, target)) # average metric between processes
+                    if self.device == torch.device("cpu"):
+                        metric = met(output, target) # average metric between processes
+                    else:
+                        metric = collect(met(output, target)) # average metric between processes
+                    
                     self.train_metrics.update(met.__name__, metric)
                 self.logger.info(f'Train Epoch: {epoch} {self._progress(batch_idx)} Loss: {loss.item():.6f}')
 

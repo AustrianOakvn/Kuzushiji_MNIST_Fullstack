@@ -19,8 +19,11 @@ class BaseTrainer(metaclass=ABCMeta):
         self.config = config
         self.logger = get_logger('trainer')
 
-        self.device = config.local_rank
+
+        self.device = torch.device(config.local_rank)
+        # Comment out if using cpu
         self.model = model.to(self.device)
+        self.model = model
 
         self.criterion = criterion
         self.metric_ftns = metric_ftns
@@ -102,7 +105,8 @@ class BaseTrainer(metaclass=ABCMeta):
 
             # divider ===
             self.logger.info('='*max_line_width)
-            dist.barrier()
+            # Comment out if not using distributed training
+            # dist.barrier()
 
 
     def _save_checkpoint(self, epoch, save_best=False, save_latest=True):

@@ -50,12 +50,13 @@ class TensorboardWriter():
             attr = getattr(self.writer, name)
             return attr
 
+
 class BatchMetrics:
     def __init__(self, *keys, postfix='', writer=None):
         self.writer = writer
         self.postfix = postfix
         if postfix:
-            keys = [k+postfix for k in keys]
+            keys = [k + postfix for k in keys]
         self._data = pd.DataFrame(index=keys, columns=['total', 'counts', 'average'])
         self.reset()
 
@@ -80,12 +81,13 @@ class BatchMetrics:
     def result(self):
         return dict(self._data.average)
 
+
 class EpochMetrics:
     def __init__(self, metric_names, phases=('train', 'valid'), monitoring='off'):
         self.logger = get_logger('epoch-metrics')
         # setup pandas DataFrame with hierarchical columns
         columns = tuple(product(metric_names, phases))
-        self._data = pd.DataFrame(columns=columns) # TODO: add epoch duration
+        self._data = pd.DataFrame(columns=columns)  # TODO: add epoch duration
         self.monitor_mode, self.monitor_metric = self._parse_monitoring_mode(monitoring)
         self.topk_idx = []
 
@@ -127,7 +129,7 @@ class EpochMetrics:
         """
         if len(self.topk_idx) > k and self.monitor_mode != 'off':
             last_epoch = self._data.index[-1]
-            self.topk_idx = self.topk_idx[:(k+1)]
+            self.topk_idx = self.topk_idx[:(k + 1)]
             if last_epoch not in self.topk_idx:
                 to_delete = last_epoch
             else:
@@ -143,8 +145,10 @@ class EpochMetrics:
                 pass
 
     def update(self, epoch, result):
+        # print(type(result))
+        # print(result.items())
         epoch_idx = f'epoch-{epoch}'
-        self._data.loc[epoch_idx] = {tuple(k.split('/')):v for k, v in result.items()}
+        self._data.loc[epoch_idx] = {tuple(k.split('/')): v for k, v in result.items()}
 
         self.topk_idx.append(epoch_idx)
         self.topk_idx = sorted(self.topk_idx, key=self.minimizing_metric)
