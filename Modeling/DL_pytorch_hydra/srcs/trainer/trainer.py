@@ -33,6 +33,7 @@ class Trainer(BaseTrainer):
         Training logic for an epoch
         :param epoch: Integer, current training epoch.
         :return: A log that contains average loss and metric in this epoch.
+        This function will be called in train function of Basetrainer
         """
         self.model.train()
         self.train_metrics.reset()
