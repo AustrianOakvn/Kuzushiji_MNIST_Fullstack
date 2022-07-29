@@ -59,6 +59,9 @@ class BatchMetrics:
     """
     """
     def __init__(self, *keys, postfix='', writer=None):
+        """
+        postfix is set either /train or /valid
+        """
         self.writer = writer
         self.postfix = postfix
         if postfix:
@@ -68,6 +71,7 @@ class BatchMetrics:
 
     def reset(self):
         """
+        Set all values in dataframe equal to 0
         """
         for col in self._data.columns:
             self._data[col].values[:] = 0
