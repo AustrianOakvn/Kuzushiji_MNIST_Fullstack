@@ -67,6 +67,12 @@ Download the dataset and extract to Data folder.
 
 ## Results
 
+## Future development
+- Object detection project (Metrics)
+- Natural language processing project (Hugging face)
+- Integrate Weight and Bias
+- Deployment (Flask or Django)
+
 ## License
 
 This project is licensed under the MIT License. See LICENSE for more details
