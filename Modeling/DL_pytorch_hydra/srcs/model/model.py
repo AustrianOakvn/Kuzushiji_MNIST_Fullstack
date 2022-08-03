@@ -1,3 +1,4 @@
+from turtle import forward
 import torch.nn as nn
 import torch.nn.functional as F
 # from base import BaseModel
@@ -22,16 +23,16 @@ class MnistModel(nn.Module):
         return F.log_softmax(x, dim=1)
 
 
-
 class KMnistModel(nn.Module):
     """
     Model implementation for KMnist dataset
     """
+
     def __init__(self) -> None:
         super().__init__()
 
         self.conv1 = nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1)
-        
+
         self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)
         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=0)
         self.conv4 = nn.Conv2d(64, 96, kernel_size=3, stride=1, padding=1)
@@ -67,3 +68,30 @@ class KMnistModel(nn.Module):
         return x
 
 
+class VGG(nn.Module):
+    """VGG Implementation based on: https://github.com/bentrevett/pytorch-image-classification/blob/master/4_vgg.ipynb"""
+
+    def __init__(self, features, output_dim) -> None:
+        super().__init__()
+        self.features = features
+        self.avgpool = nn.AdaptiveAvgPool2d(7)
+
+        self.classifier = nn.Sequential(
+            nn.Linear(512*7*7, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.5),
+            nn.Linear(4096, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.5),
+            nn.Linear(4096, output_dim)
+        )
+
+    def forward(self, x):
+        """
+        Forward pass
+        """
+        x = self.features(x)
+        x = self.avgpool(x)
+        h = x.view(x.shape[0], -1)
+        x = self.classifier(h)
+        return x, h
