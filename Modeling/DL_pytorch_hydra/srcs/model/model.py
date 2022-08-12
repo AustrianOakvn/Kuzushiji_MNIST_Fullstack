@@ -72,6 +72,7 @@ class VGG(nn.Module):
     """
     VGG Implementation based on: https://github.com/bentrevett/pytorch-image-classification/blob/master/4_vgg.ipynb
     """
+    # TODO: Set the configuration in yaml file through hydra instead of python
 
     def __init__(self, features, output_dim) -> None:
         super().__init__()
@@ -100,6 +101,11 @@ class VGG(nn.Module):
 
 
 class ResNet(nn.Module):
+
+    '''
+    ResNet implementation based on: https://github.com/bentrevett/pytorch-image-classification/blob/master/5_resnet.ipynb
+    '''
+    # TODO: Set the configuration in yaml file through hydra instead of python
     def __init__(self, config, output_dim) -> None:
         super().__init__()
 
