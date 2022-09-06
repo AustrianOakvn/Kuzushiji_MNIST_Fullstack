@@ -1,6 +1,7 @@
 import logging
 import torch
 import hydra
+from hydra import utils
 from omegaconf import OmegaConf
 from tqdm import tqdm
 from srcs.utils import instantiate
@@ -11,7 +12,10 @@ logger = logging.getLogger('evaluate')
 @hydra.main(config_path='conf', config_name='evaluate')
 def main(config):
     logger.info('Loading checkpoint: {} ...'.format(config.checkpoint))
-    checkpoint = torch.load(config.checkpoint)
+    # checkpoint = torch.load(config.checkpoint)
+    checkpoint = torch.load(utils.to_absolute_path(config.checkpoint))
+    # print(checkpoint)
+
 
     loaded_config = OmegaConf.create(checkpoint['config'])
 
@@ -24,8 +28,8 @@ def main(config):
 
     # load trained weights
     state_dict = checkpoint['state_dict']
-    if loaded_config['n_gpu'] > 1:
-        model = torch.nn.DataParallel(model)
+    # if loaded_config['n_gpu'] > 1:
+    #     model = torch.nn.DataParallel(model)
     model.load_state_dict(state_dict)
 
     # instantiate loss and metrics

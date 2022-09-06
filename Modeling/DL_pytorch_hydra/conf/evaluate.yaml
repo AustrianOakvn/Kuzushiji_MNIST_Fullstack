@@ -1,12 +1,12 @@
 log_dir: ${name}/
-checkpoint: ???
+checkpoint: outputs/2022-09-04/11-10-49/models/model_best.pth
 
 metrics:
   - _target_: srcs.model.metric.accuracy
   - _target_: srcs.model.metric.top_k_acc
 
 defaults:
-  - dataset: mnist_test
+  - data: mnist_test
 
   - hydra/job_logging : custom
-  - hydra/run/dir: no_chdir
+  # - hydra/run/dir: no_chdir

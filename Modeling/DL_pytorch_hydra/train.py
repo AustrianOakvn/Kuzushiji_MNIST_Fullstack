@@ -61,15 +61,15 @@ def init_worker(rank, ngpus, working_dir, config):
 
     # TODO: Timeout error: The client socket has timed out after 1800s while trying to connect to 127.0.0.1, 34567
 
-    # dist.init_process_group(
-    #     backend='nccl',
-    #     init_method='tcp://127.0.0.1:34567',
-    #     world_size=ngpus,
-    #     rank=rank)
+    dist.init_process_group(
+        backend='nccl',
+        init_method='tcp://127.0.0.1:34567',
+        world_size=ngpus,
+        rank=rank)
 
     # Comment out in case of using only cpu
 
-    # torch.cuda.set_device(rank)
+    torch.cuda.set_device(rank)
 
     # start training processes
     print('Start train worker')
@@ -94,9 +94,9 @@ def main(config):
     config = OmegaConf.to_yaml(config, resolve=True)
     # print(config)
     print(n_gpu)
-    # torch.multiprocessing.spawn(init_worker, nprocs=n_gpu, args=(n_gpu, working_dir, config))
+    torch.multiprocessing.spawn(init_worker, nprocs=n_gpu, args=(n_gpu, working_dir, config))
     # init_worker(1, n_gpu, working_dir, config)
-    init_worker(device, n_gpu, working_dir, config)
+    # init_worker(0, n_gpu, working_dir, config)
     
     print("Hello")
 

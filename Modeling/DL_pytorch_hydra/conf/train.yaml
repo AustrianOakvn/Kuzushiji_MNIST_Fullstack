@@ -12,7 +12,6 @@ defaults:
   - data: mnist_train
   - model: mnist_lenet
   - hparams: lenet_baseline
-
   - status: train
 
   - override hydra/job_logging : custom
